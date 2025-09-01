@@ -143,6 +143,12 @@ app.use('/api/slider-images', sliderImages);
 app.use('/api/users', usersRouter);
 app.use('/api/wishlist', require('./routes/wishlist'));
 app.use('/api/chats', require('./routes/chat'));
+app.use('/api/sold', require('./routes/sold'));
+
+// --- Health check endpoint ---
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: Date.now() });
+});
 
 // --- Connect MongoDB ---
 mongoose.connect(process.env.MONGO_URI)

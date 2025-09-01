@@ -5,7 +5,7 @@ const soldSchema = new mongoose.Schema({
   model: { type: String,  },
   year: { type: Number,  },
   price: { type: Number, },
-  stock: { type: Number, default: 0 },
+  stock: { type: Number, },
   mileage: { type: Number },
   engineCapacity: { type: Number },
   brand: { type: String, enum: ['Yamaha', 'Suzuki', 'KTM', 'Bajaj', 'HeroHonda', 'Honda']},
@@ -17,20 +17,23 @@ const soldSchema = new mongoose.Schema({
             },
   ownerName: { type: String },
   ownerContact: { type: Number },
-  status: { type: String, enum: ['available', 'sold'], default: 'available' },
   createdAt: { type: Date, default: Date.now },
-  documents: [ // Documents per managed candidate
+  documents: [ 
        {
           type: {
           type: String,
-          enum: ['Bike Book', 'Revenue License', 'Insurance', 'Emmision Test'],
+          enum: ['Bike Book', 'Revenue License', 'Insurance', 'Emmision Test','Transfer Document','Old Owner ID','New Owner ID'],
           required: true,
     },
     fileName: { type: String, required: true },
     fileUrl: { type: String, required: true },
     uploadedAt: { type: Date, default: Date.now }
   }
-]
+],
+newOwnerName: { type: String, },
+newOwnerContact: { type: Number, },
+soldAt: { type: Date, default: Date.now },
+soldFor: { type: Number,},
 });
 
 module.exports = mongoose.model('Sold', soldSchema);

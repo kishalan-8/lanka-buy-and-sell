@@ -68,6 +68,9 @@ const uploadBikeFiles = upload.fields([
   { name: 'Insurance', maxCount: 1 },
   { name: 'Emmision Test', maxCount: 1 },
   { name: 'images', maxCount: 10 },
+  { name: 'Transfer Document', maxCount: 1 }, 
+  { name: 'Old Owner ID', maxCount: 1 },
+  { name: 'New Owner ID', maxCount: 1 },
 ]);
 
 module.exports = uploadBikeFiles; 

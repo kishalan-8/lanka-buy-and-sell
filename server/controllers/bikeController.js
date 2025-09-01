@@ -1,4 +1,5 @@
 const Bike = require('../models/Bike');
+const Sold = require('../models/Sold');
 const cloudinary = require('../config/cloudinary');
 const { v4: uuidv4 } = require('uuid');
 
@@ -195,3 +196,54 @@ exports.deleteBike = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error deleting bike' });
   }
 };
+
+// --------------------
+// Sell bike
+// --------------------
+exports.sellBike = async (req, res) => {
+  try {
+    const { bikeId, newOwnerName, newOwnerContact, soldFor } = req.body;
+
+    // Find the bike
+    const bike = await Bike.findById(bikeId);
+    if (!bike) return res.status(404).json({ message: "Bike not found" });
+
+    // Create sold entry
+    const sold = new Sold({
+      bikeID: bike._id.toString(),
+      model: bike.model,
+      year: bike.year,
+      price: bike.price,
+      stock: bike.stock,
+      mileage: bike.mileage,
+      engineCapacity: bike.engineCapacity,
+      brand: bike.brand,
+      condition: bike.condition,
+      images: bike.images,
+      description: bike.description,
+      createdby: bike.createdby,
+      ownerName: bike.ownerName,
+      ownerContact: bike.ownerContact,
+      documents: bike.documents,
+      newOwnerName,
+      newOwnerContact,
+      soldFor,
+    });
+
+    await sold.save();
+
+    // Update stock
+    bike.stock -= 1;
+    if (bike.stock <= 0) {
+      await Bike.findByIdAndDelete(bikeId);
+    } else {
+      await bike.save();
+    }
+
+    return res.status(200).json({ message: "Bike sold successfully", sold });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error selling bike" });
+  }
+};
+

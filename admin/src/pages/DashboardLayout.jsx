@@ -22,6 +22,7 @@ const navItems = [
   { to: "/users", label: "Clients", icon: Users },
   { to: "/submissions", label: "Submissions", icon: Users },
   { to: "/adminchat", label: "Chat", icon: Users },
+  { to: "/sold-bikes", label: "Sold Bikes", icon: CheckSquare },
   {
     label: "Admin",
     icon: Shield,

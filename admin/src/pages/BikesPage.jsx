@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Plus, Trash2, Edit2, Eye, FileText } from "lucide-react";
+import { Plus, Trash2, Edit2, Eye, FileText, DollarSign } from "lucide-react";
 import AddBikeModel from "../components/AddBikeModel";
 import EditBikeModel from "../components/EditBikeModel";
 import ViewBikeModel from "../components/ViewBikeModel";
+import SellBikeModel from "../components/SellBikeModel";
 import axios from "axios";
 import { jsPDF } from "jspdf";
 
@@ -14,8 +15,11 @@ const BikesPage = () => {
   const [isAddBikeOpen, setIsAddBikeOpen] = useState(false);
   const [isEditBikeOpen, setIsEditBikeOpen] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
+  const [isSellOpen, setIsSellOpen] = useState(false);
   const [editBikeData, setEditBikeData] = useState(null);
   const [selectedBike, setSelectedBike] = useState(null);
+  const [sellBikeData, setSellBikeData] = useState(null);
+
   const token = localStorage.getItem("token");
 
   const fetchBikes = async () => {
@@ -36,7 +40,9 @@ const BikesPage = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this bike?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/bikes/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`http://localhost:5000/api/bikes/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       fetchBikes();
     } catch (err) {
       console.error(err);
@@ -54,9 +60,9 @@ const BikesPage = () => {
     setIsViewOpen(true);
   };
 
-  const handleCloseView = () => {
-    setSelectedBike(null);
-    setIsViewOpen(false);
+  const handleSell = (bike) => {
+    setSellBikeData(bike);
+    setIsSellOpen(true);
   };
 
   // PDF for single bike
@@ -85,15 +91,22 @@ const BikesPage = () => {
     fields.forEach(([label, value]) => {
       doc.text(`${label}: ${value}`, 10, y);
       y += 10;
-      if (y > 280) { doc.addPage(); y = 20; }
+      if (y > 280) {
+        doc.addPage();
+        y = 20;
+      }
     });
 
     if (bike.documents && bike.documents.length > 0) {
-      doc.text("Documents:", 10, y); y += 10;
+      doc.text("Documents:", 10, y);
+      y += 10;
       bike.documents.forEach((docItem, idx) => {
         doc.text(`${idx + 1}. ${docItem.type} (${docItem.fileName})`, 12, y);
         y += 8;
-        if (y > 280) { doc.addPage(); y = 20; }
+        if (y > 280) {
+          doc.addPage();
+          y = 20;
+        }
       });
     }
 
@@ -109,7 +122,8 @@ const BikesPage = () => {
     let y = 30;
 
     bikes.forEach((bike, index) => {
-      doc.text(`${index + 1}. ${bike.brand} ${bike.model}`, 10, y); y += 8;
+      doc.text(`${index + 1}. ${bike.brand} ${bike.model}`, 10, y);
+      y += 8;
       const fields = [
         ["Bike ID", bike.bikeID],
         ["Year", bike.year],
@@ -123,13 +137,23 @@ const BikesPage = () => {
         ["Owner Contact", bike.ownerContact || "N/A"],
         ["Description", bike.description || "N/A"],
       ];
-      fields.forEach(([label, value]) => { doc.text(`${label}: ${value}`, 12, y); y += 6; });
+      fields.forEach(([label, value]) => {
+        doc.text(`${label}: ${value}`, 12, y);
+        y += 6;
+      });
       if (bike.documents && bike.documents.length > 0) {
-        doc.text("Documents:", 12, y); y += 6;
-        bike.documents.forEach((docItem, idx) => { doc.text(`${idx + 1}. ${docItem.type} (${docItem.fileName})`, 14, y); y += 6; });
+        doc.text("Documents:", 12, y);
+        y += 6;
+        bike.documents.forEach((docItem, idx) => {
+          doc.text(`${idx + 1}. ${docItem.type} (${docItem.fileName})`, 14, y);
+          y += 6;
+        });
       }
       y += 6;
-      if (y > 280) { doc.addPage(); y = 20; }
+      if (y > 280) {
+        doc.addPage();
+        y = 20;
+      }
     });
 
     doc.save("Bike_Inventory_Report.pdf");
@@ -139,7 +163,6 @@ const BikesPage = () => {
     filter === "All"
       ? bikes
       : bikes.filter((bike) => bike.condition === filter);
-  const hoverCard = { hover: { y: -5, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)", transition: { type: "spring", stiffness: 200 } } };
 
   return (
     <div className="p-6">
@@ -151,13 +174,13 @@ const BikesPage = () => {
             onClick={() => setIsAddBikeOpen(true)}
             className="px-3 py-1 bg-gray-200 text-gray-800 rounded text-sm hover:bg-gray-300 transition"
           >
-            <Plus size={14} /> Add Bike
+            <Plus size={14} className="text-blue-500" /> Add Bike
           </button>
           <button
             onClick={generateAllBikesReport}
             className="px-3 py-1 bg-gray-200 text-gray-800 rounded text-sm hover:bg-gray-300 transition"
           >
-            <FileText size={14} /> Generate Report
+            <FileText size={14} className="text-blue-500" /> Generate Report
           </button>
         </div>
       </div>
@@ -169,7 +192,9 @@ const BikesPage = () => {
             key={status}
             onClick={() => setFilter(status)}
             className={`px-3 py-1 rounded text-sm ${
-              filter === status ? "bg-gray-400 text-white" : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+              filter === status
+                ? "bg-gray-400 text-white"
+                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
             }`}
           >
             {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -218,7 +243,9 @@ const BikesPage = () => {
               </div>
             )}
 
-            <h3 className="font-bold text-lg mb-1">{bike.brand} {bike.model}</h3>
+            <h3 className="font-bold text-lg mb-1">
+              {bike.brand} {bike.model}
+            </h3>
             <p className="text-sm text-gray-600 mb-2">{bike.description}</p>
             <div className="flex flex-wrap gap-2 text-gray-700 text-sm mb-2">
               <span>Year: {bike.year}</span>
@@ -237,25 +264,31 @@ const BikesPage = () => {
                 onClick={() => handleEdit(bike)}
                 className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition"
               >
-                <Edit2 size={14} className="text-blue-500"/> Edit
+                <Edit2 size={14} className="text-blue-500" /> Edit
               </button>
               <button
                 onClick={() => handleDelete(bike._id)}
                 className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition"
               >
-                <Trash2 size={14} className="text-blue-500"/> Delete
+                <Trash2 size={14} className="text-blue-500" /> Delete
               </button>
               <button
                 onClick={() => handleView(bike)}
                 className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition"
               >
-                <Eye size={14} className="text-blue-500"/> View
+                <Eye size={14} className="text-blue-500" /> View
               </button>
               <button
                 onClick={() => generateBikeReport(bike)}
                 className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition"
               >
-                <FileText size={14} className="text-blue-500"/> Report
+                <FileText size={14} className="text-blue-500" /> Report
+              </button>
+              <button
+                onClick={() => handleSell(bike)}
+                className="px-3 py-1 bg-green-100 text-green-800 rounded text-sm hover:bg-green-200 transition"
+              >
+                <DollarSign size={14} className="text-green-600" /> Sell
               </button>
             </div>
           </motion.div>
@@ -263,9 +296,28 @@ const BikesPage = () => {
       </div>
 
       {/* Modals */}
-      <AddBikeModel isOpen={isAddBikeOpen} onClose={() => setIsAddBikeOpen(false)} refreshBikes={fetchBikes} />
-      <EditBikeModel isOpen={isEditBikeOpen} onClose={() => setIsEditBikeOpen(false)} refreshBikes={fetchBikes} bike={editBikeData} />
-      <ViewBikeModel isOpen={isViewOpen} onClose={handleCloseView} bike={selectedBike} />
+      <AddBikeModel
+        isOpen={isAddBikeOpen}
+        onClose={() => setIsAddBikeOpen(false)}
+        refreshBikes={fetchBikes}
+      />
+      <EditBikeModel
+        isOpen={isEditBikeOpen}
+        onClose={() => setIsEditBikeOpen(false)}
+        refreshBikes={fetchBikes}
+        bike={editBikeData}
+      />
+      <ViewBikeModel
+        isOpen={isViewOpen}
+        onClose={() => setSelectedBike(null)}
+        bike={selectedBike}
+      />
+      <SellBikeModel
+        isOpen={isSellOpen}
+        onClose={() => setIsSellOpen(false)}
+        bike={sellBikeData}
+        refreshBikes={fetchBikes}
+      />
     </div>
   );
 };

@@ -10,6 +10,7 @@ import AdminSubmissions from './pages/AdminSubmissions';
 import AdminUsers from './pages/AdminUsers';
 import DashboardLayout from './pages/DashboardLayout';
 import AdminChat from './pages/AdminChat';
+import SoldBikesPage from './pages/SoldBikesPage';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/submissions" element={<AdminSubmissions />} />
           <Route path="/users" element={<AdminUsers />} />
           <Route path="/adminchat" element={<AdminChat />} />
+          <Route path="/sold-bikes" element={<SoldBikesPage />} />
         </Route>
       </Routes>
     </Router>
