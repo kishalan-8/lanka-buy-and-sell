@@ -15,6 +15,7 @@ import {
   LogOut,
   ChevronRight,
 } from "lucide-react";
+import logo from '../assets/logo.png';
 
 const navItems = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -23,14 +24,14 @@ const navItems = [
   { to: "/submissions", label: "Submissions", icon: Users },
   { to: "/adminchat", label: "Chat", icon: Users },
   { to: "/sold-bikes", label: "Sold Bikes", icon: CheckSquare },
-  {
-    label: "Admin",
-    icon: Shield,
-    children: [
-      { to: "/admin-dashboard/admin", label: "Users", icon: UserCog },
-      { to: "/admin-dashboard/admin/settings", label: "Settings", icon: Settings }
-    ]
-  }
+  // {
+  //   label: "Admin",
+  //   icon: Shield,
+  //   children: [
+  //     { to: "/admin-dashboard/admin", label: "Users", icon: UserCog },
+  //     { to: "/admin-dashboard/admin/settings", label: "Settings", icon: Settings }
+  //   ]
+  // }
 ];
 
 
@@ -101,7 +102,7 @@ const DashboardLayout = () => {
             exit={{ x: -300, opacity: 0 }}
           >
             <div className="flex justify-between items-center mb-8">
-              <img src="/blue-whale-logo.webp" alt="Logo" className="h-12" />
+              <img src={logo} alt="Logo" className="h-12" />
               <button className="md:hidden" onClick={() => setSidebarOpen(false)}>
                 <X />
               </button>

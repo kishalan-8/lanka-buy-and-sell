@@ -244,7 +244,7 @@ const DashboardLayout = () => {
                         >
                           <Home className="w-5 h-5" />
                         </motion.div>
-                        Back to Jobs
+                        Back to Bikes
                       </div>
                     </Link>
                   </motion.div>

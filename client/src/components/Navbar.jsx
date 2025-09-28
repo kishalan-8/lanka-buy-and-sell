@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { motion } from "framer-motion";
 import { User, LogIn, UserPlus, Menu, X } from "lucide-react";
 import { useState } from "react";
+import logo from '../assets/logo.png';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -21,7 +22,7 @@ const Navbar = () => {
   return (
     <>
       {/* Navbar container */}
-      <div className="w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
+      <div className="w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0">
         <motion.header
           initial={{ y: -100 }}
           animate={{ y: 0 }}
@@ -31,7 +32,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <img
-              src="/blue-whale-logo.webp"
+              src={logo}
               className="h-12 w-auto"
               alt="Blue Whale Migration Logo"
             />

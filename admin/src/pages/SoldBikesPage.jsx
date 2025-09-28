@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Trash2, Edit2, FileText, Plus, Eye } from "lucide-react";
 import axios from "axios";
 import { jsPDF } from "jspdf";
-import AddSoldBikeModel from "../components/AddSoldBikeModel";
+
 import EditSoldBikeModel from "../components/EditSoldBikeModel";
 import ViewSoldBikeModel from "../components/ViewSoldBikeModel";
 
@@ -11,7 +11,6 @@ const SoldBikesPage = () => {
   const [soldBikes, setSoldBikes] = useState([]);
   const [filter, setFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [isAddSoldOpen, setIsAddSoldOpen] = useState(false);
   const [isEditSoldOpen, setIsEditSoldOpen] = useState(false);
   const [editSoldBikeData, setEditSoldBikeData] = useState(null);
   const [isViewOpen, setIsViewOpen] = useState(false);
@@ -123,12 +122,6 @@ const SoldBikesPage = () => {
             className="px-3 py-1 bg-gray-200 text-gray-800 rounded text-sm hover:bg-gray-300 transition"
           >
             <FileText size={14} className="text-blue-500" /> Generate Report
-          </button>
-          <button
-            onClick={() => setIsAddSoldOpen(true)}
-            className="px-3 py-1 bg-gray-200 text-gray-800 rounded text-sm hover:bg-gray-300 transition"
-          >
-            <Plus size={14} className="text-blue-500" /> Add Sold Bike
           </button>
         </div>
       </div>
@@ -249,11 +242,6 @@ const SoldBikesPage = () => {
       </div>
 
       {/* Modals */}
-      <AddSoldBikeModel
-        isOpen={isAddSoldOpen}
-        onClose={() => setIsAddSoldOpen(false)}
-        refreshSoldBikes={fetchSoldBikes}
-      />
       <EditSoldBikeModel
         isOpen={isEditSoldOpen}
         onClose={() => setIsEditSoldOpen(false)}

@@ -52,9 +52,8 @@ const SellBike = () => {
         price: '',
         condition: '',
         description: '',
-        sellerName: '',
-        sellerPhone: '',   // ✅ Reset
-        sellerEmail: '',   // ✅ Reset
+        ownerName: '',
+        ownerContact: ''  
       });
       setImages([]);
     } catch (err) {
@@ -121,22 +120,22 @@ const SellBike = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block font-medium mb-1">Seller Name</label>
-            <input type="text" name="sellerName" value={formData.sellerName} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
+            <input type="text" name="ownerName" value={formData.ownerName} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
           </div>
 
           <div>
             <label className="block font-medium mb-1">Phone Number</label>
             <input
               type="text"
-              name="sellerPhone" // ✅ Correct field
-              value={formData.sellerPhone}
+              name="ownerContact" // ✅ Correct field
+              value={formData.ownerContact}
               onChange={handleChange}
               required
               className="w-full border px-3 py-2 rounded"
             />
           </div>
 
-          <div className="md:col-span-2">
+          {/* <div className="md:col-span-2">
             <label className="block font-medium mb-1">Email</label>
             <input
               type="email"
@@ -146,7 +145,7 @@ const SellBike = () => {
               required
               className="w-full border px-3 py-2 rounded"
             />
-          </div>
+          </div> */}
         </div>
 
         <div className="pt-4">

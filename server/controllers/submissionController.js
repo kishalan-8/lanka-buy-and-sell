@@ -177,3 +177,70 @@ exports.getUserSubmissions = async (req, res) => {
     res.status(500).json({ success: false, message: "Error fetching submissions" });
   }
 };
+
+// --------------------
+// Update submission (ADMIN or Owner)
+// --------------------
+
+exports.updateSubmission = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find submission
+    const submission = await Submission.findById(id);
+    if (!submission) {
+      return res.status(404).json({ success: false, message: "Submission not found" });
+    }
+
+    // Update basic fields from req.body (except retainedImages)
+    Object.keys(req.body).forEach(key => {
+      if (key !== 'retainedImages' && req.body[key] !== undefined) {
+        submission[key] = req.body[key];
+      }
+    });
+
+    // Update images
+    let retainedImages = [];
+    if (req.body.retainedImages) {
+      // Can be a single string or array
+      retainedImages = Array.isArray(req.body.retainedImages)
+        ? req.body.retainedImages
+        : [req.body.retainedImages];
+    }
+
+    const newImages = req.files['images'] ? req.files['images'].map(file => file.path) : [];
+    submission.images = [...retainedImages, ...newImages]; // merge old + new
+
+    // Update documents
+    ['Bike Book', 'Revenue License', 'Insurance', 'Emmision Test'].forEach(type => {
+      if (req.files[type]) {
+        req.files[type].forEach(file => {
+          const existingDoc = submission.documents.find(d => d.type === type);
+          if (existingDoc) {
+            existingDoc.fileName = file.originalname;
+            existingDoc.fileUrl = file.path;
+            existingDoc.uploadedAt = new Date();
+          } else {
+            submission.documents.push({
+              type,
+              fileName: file.originalname,
+              fileUrl: file.path,
+              uploadedAt: new Date()
+            });
+          }
+        });
+      }
+    });
+    
+    await submission.save();
+    res.status(200).json({
+      success: true,
+      message: "Submission updated successfully",
+      data: submission,
+    });
+  } catch (err) {
+    console.error("Update submission error:", err);
+    res.status(500).json({ success: false, message: "Error updating submission" });
+  }
+};
+

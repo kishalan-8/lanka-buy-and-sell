@@ -69,7 +69,6 @@ const AddSoldBikeModel = ({ isOpen, onClose, refreshSoldBikes }) => {
 
       // Reset form
       setForm({
-        bikeID: "",
         model: "",
         year: "",
         price: "",
@@ -121,7 +120,6 @@ const AddSoldBikeModel = ({ isOpen, onClose, refreshSoldBikes }) => {
         {/* Info Tab */}
         {activeTab === "info" && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <input name="bikeID" placeholder="Bike ID" value={form.bikeID} onChange={handleInputChange} className="p-2 border rounded"/>
             <input name="model" placeholder="Model" value={form.model} onChange={handleInputChange} className="p-2 border rounded"/>
             <input name="year" type="number" placeholder="Year" value={form.year} onChange={handleInputChange} className="p-2 border rounded"/>
             <input name="price" type="number" placeholder="Price" value={form.price} onChange={handleInputChange} className="p-2 border rounded"/>

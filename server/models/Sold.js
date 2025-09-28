@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const soldSchema = new mongoose.Schema({
-  bikeID: { type: String, unique: true, required: true }, // UUID
+  bikeID: { type: String, required: true }, // UUID
   model: { type: String,  },
   year: { type: Number,  },
   price: { type: Number, },

@@ -116,6 +116,18 @@ const BikeCard = ({ bike }) => {
         >
           {bike.condition}
         </span>
+        <span>
+          {/* Saved indicator */}
+          {isSaved && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="absolute top-10 left-3 bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full font-medium z-10"
+            >
+              Saved
+            </motion.div>
+          )}
+        </span>
       </div>
 
       {/* Info Section */}
@@ -164,18 +176,18 @@ const BikeCard = ({ bike }) => {
               View Details
             </Link>
 
-            <motion.button
+            {/* <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg text-sm font-semibold hover-glow transition-all duration-300 shadow-lg flex items-center justify-center gap-2"
             >
               <Send className="w-4 h-4" />
               Apply
-            </motion.button>
+            </motion.button> */}
           </div>
 
           {/* Saved indicator */}
-          {isSaved && (
+          {/* {isSaved && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -183,7 +195,7 @@ const BikeCard = ({ bike }) => {
             >
               Saved
             </motion.div>
-          )}
+          )} */}
         </div>
       </motion.div>
     </motion.div>

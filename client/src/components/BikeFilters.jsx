@@ -75,12 +75,12 @@ const BikeFilters = ({ onFilter, mobileView = false }) => {
   };
 
   const brandOptions = [
-    { label: "Honda", value: "honda" },
-    { label: "Yamaha", value: "yamaha" },
-    { label: "Suzuki", value: "suzuki" },
-    { label: "KTM", value: "ktm" },
-    { label: "Bajaj", value: "bajaj" },
-    { label: "Hero Honda", value: "herohonda" }
+    { label: "Honda", value: "Honda" },
+    { label: "Yamaha", value: "Yamaha" },
+    { label: "Suzuki", value: "Suzuki" },
+    { label: "KTM", value: "KTM" },
+    { label: "Bajaj", value: "Bajaj" },
+    { label: "Hero Honda", value: "Hero Honda" }
   ];
 
   const conditionOptions = [
