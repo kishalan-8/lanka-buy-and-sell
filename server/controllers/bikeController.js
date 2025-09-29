@@ -171,24 +171,6 @@ exports.deleteBike = async (req, res) => {
     const bike = await Bike.findById(req.params.id);
     if (!bike) return res.status(404).json({ success: false, message: 'Bike not found' });
 
-    // Delete images from Cloudinary
-    if (bike.images && bike.images.length > 0) {
-      for (let imgUrl of bike.images) {
-        const publicId = imgUrl.split('/').pop().split('.')[0];
-        await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
-      }
-    }
-
-    // Delete documents from Cloudinary
-    if (bike.documents && bike.documents.length > 0) {
-      for (let doc of bike.documents) {
-        if (doc.fileUrl) {
-          const publicId = doc.fileUrl.split('/').pop().split('.')[0];
-          await cloudinary.uploader.destroy(publicId, { resource_type: 'auto' });
-        }
-      }
-    }
-
     await Bike.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Bike deleted successfully' });
   } catch (error) {
